@@ -1,0 +1,30 @@
+# Environment
+.env
+.env.local
+
+# Dependencies
+node_modules/
+
+# Backend build (if any)
+backend/dist/
+backend/build/
+
+# Frontend source maps (optional - can commit these too)
+# frontend/dist/**/*.map
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# IMPORTANT: frontend/dist/ is NOT ignored
+# It contains pre-built static files for instant deployment

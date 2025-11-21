@@ -1,0 +1,6 @@
+[test]
+# Run tests from the tests directory
+preload = ["./tests/setup.ts"]
+
+# Test discovery pattern
+testGlob = ["tests/**/*.test.ts"]

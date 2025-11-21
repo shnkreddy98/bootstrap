@@ -1,0 +1,68 @@
+/**
+ * Global Styles
+ *
+ * Imports Tailwind v4 and applies global terminal-inspired styling
+ */
+
+@import "tailwindcss";
+@import "./theme.css";
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply min-h-screen bg-bg-0 text-fg-0 antialiased;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
+}
+
+/* Links - Brand colored with subtle underline */
+a {
+  color: var(--color-brand);
+  text-underline-offset: 2px;
+  transition: all 150ms ease;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Custom Scrollbar - Terminal Style */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-bg-3);
+  border-radius: 0px;
+  transition: background 150ms ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-0);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: var(--color-brand);
+}
+
+*::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-bg-3) transparent;
+}
+
+*:hover {
+  scrollbar-color: var(--color-border-0) transparent;
+}
