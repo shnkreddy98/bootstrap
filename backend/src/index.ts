@@ -35,7 +35,7 @@ app.get('/api/todos', async (c) => {
   const todos = await queryValidated(
     'SELECT id, title, completed, created_at FROM todos ORDER BY created_at DESC',
     [],
-    todoListSchema
+    todoSchema
   )
   return c.json(todos)
 })

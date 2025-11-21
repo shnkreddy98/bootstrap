@@ -1,6 +1,5 @@
 import { describe, test, expect, beforeAll, afterAll } from "bun:test";
-import { queryValidated } from "../src/db";
-import { todoListSchema } from "../src/schemas";
+import { query } from "../src/db";
 
 /**
  * Backend Integration Tests
@@ -28,10 +27,9 @@ describe("Backend Integration Tests - /api/todos", () => {
   // Cleanup before tests
   beforeAll(async () => {
     // Clean up any existing test data
-    await queryValidated(
+    await query(
       "DELETE FROM todos WHERE title = $1",
-      [testTodo.title],
-      todoListSchema
+      [testTodo.title]
     );
   });
 
@@ -39,10 +37,9 @@ describe("Backend Integration Tests - /api/todos", () => {
   afterAll(async () => {
     // Clean up test data
     if (createdTodoId) {
-      await queryValidated(
+      await query(
         "DELETE FROM todos WHERE id = $1",
-        [createdTodoId],
-        todoListSchema
+        [createdTodoId]
       );
     }
   });

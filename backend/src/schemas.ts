@@ -23,7 +23,7 @@ export const todoSchema = z.object({
   id: z.number().int().positive(),
   title: z.string().min(1).max(200),
   completed: z.boolean(),
-  created_at: z.string(), // JSON-safe: database TIMESTAMP serialized to string
+  created_at: z.coerce.string(), // JSON-safe: database TIMESTAMP serialized to string
 })
 
 /**
