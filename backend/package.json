@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "bun run --env-file=../.env --watch src/index.ts",
-    "start": "bun run --env-file=../.env src/index.ts",
-    "db:migrate": "bun run --env-file=../.env src/migrations/migrate.ts",
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "db:migrate": "bun run src/migrations/migrate.ts",
     "test": "bun test"
   },
   "dependencies": {
