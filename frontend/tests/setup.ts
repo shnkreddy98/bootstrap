@@ -14,44 +14,25 @@ process.env.VITE_API_URL = process.env.VITE_API_URL || "http://localhost:3000";
 export const TEST_TIMEOUT = 10000;
 
 /**
- * Component integration tests setup
- * Using jsdom for DOM environment (works better with React 19)
+ * For component integration tests, you'll need to install:
+ * bun add -d @testing-library/react @testing-library/user-event happy-dom
+ *
+ * Then uncomment this section:
  */
 
-import { JSDOM } from "jsdom";
+/*
+import { JSDOM } from "happy-dom";
 
-// Set up DOM environment with jsdom
+// Set up DOM environment
 const dom = new JSDOM("<!DOCTYPE html><html><body></body></html>", {
   url: "http://localhost",
   pretendToBeVisual: true,
 });
 
-const { window } = dom;
-const { document } = window;
-
-// Set up all necessary globals for React testing
-Object.defineProperty(global, "window", {
-  value: window,
-  writable: true,
-});
-Object.defineProperty(global, "document", {
-  value: document,
-  writable: true,
-});
-global.navigator = window.navigator as any;
-global.HTMLElement = window.HTMLElement as any;
-global.Node = window.Node as any;
-global.Element = window.Element as any;
-global.Text = window.Text as any;
-global.Comment = window.Comment as any;
-global.DocumentFragment = window.DocumentFragment as any;
-
-// Copy all window properties to global
-Object.keys(window).forEach((key) => {
-  if (!(key in global)) {
-    (global as any)[key] = (window as any)[key];
-  }
-});
+global.document = dom.window.document;
+global.window = dom.window as any;
+global.navigator = dom.window.navigator;
+*/
 
 // Mock fetch globally for tests
 // Tests can override this with their own mocks

@@ -38,7 +38,6 @@ async function fetchAPI<T>(
 ): Promise<T> {
   const response = await fetch(`${API_BASE}${endpoint}`, {
     ...options,
-    credentials: 'include', // Send cookies with requests
     headers: {
       'Content-Type': 'application/json',
       ...options?.headers,
