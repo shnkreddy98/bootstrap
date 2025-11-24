@@ -1,5 +1,6 @@
 import { describe, test, expect, beforeAll, afterAll } from "bun:test";
 import { query } from "../src/db";
+import { generateMockJWT, MOCK_USERS } from "../src/auth-mock";
 
 /**
  * Backend Integration Tests
@@ -11,9 +12,20 @@ import { query } from "../src/db";
  * - Response formatting
  *
  * Tests run against the actual server and database.
+ * Uses mock JWT authentication in test mode.
  */
 
 const API_BASE = `http://localhost:${process.env.PORT || 3000}`;
+
+// Generate mock JWT token for consistent test user
+const TEST_USER = MOCK_USERS.testUser1;
+const TEST_TOKEN = generateMockJWT(TEST_USER);
+
+// Helper to create authenticated headers
+const authHeaders = {
+  "Content-Type": "application/json",
+  "Authorization": `Bearer ${TEST_TOKEN}`,
+};
 
 // Test data
 const testTodo = {
@@ -26,10 +38,10 @@ describe("Backend Integration Tests - /api/todos", () => {
 
   // Cleanup before tests
   beforeAll(async () => {
-    // Clean up any existing test data
+    // Clean up any existing test data for the test user
     await query(
-      "DELETE FROM todos WHERE title = $1",
-      [testTodo.title]
+      "DELETE FROM todos WHERE user_id = $1 AND title = $2",
+      [TEST_USER.userId, testTodo.title]
     );
   });
 
@@ -38,8 +50,8 @@ describe("Backend Integration Tests - /api/todos", () => {
     // Clean up test data
     if (createdTodoId) {
       await query(
-        "DELETE FROM todos WHERE id = $1",
-        [createdTodoId]
+        "DELETE FROM todos WHERE id = $1 AND user_id = $2",
+        [createdTodoId, TEST_USER.userId]
       );
     }
   });
@@ -53,7 +65,9 @@ describe("Backend Integration Tests - /api/todos", () => {
   });
 
   test("GET /api/todos - fetch all todos", async () => {
-    const response = await fetch(`${API_BASE}/api/todos`);
+    const response = await fetch(`${API_BASE}/api/todos`, {
+      headers: authHeaders,
+    });
     const data = await response.json();
 
     expect(response.status).toBe(200);
@@ -70,7 +84,7 @@ describe("Backend Integration Tests - /api/todos", () => {
   test("POST /api/todos - create a new todo", async () => {
     const response = await fetch(`${API_BASE}/api/todos`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders,
       body: JSON.stringify(testTodo),
     });
     const data = await response.json();
@@ -88,7 +102,7 @@ describe("Backend Integration Tests - /api/todos", () => {
   test("POST /api/todos - validation fails with invalid data", async () => {
     const response = await fetch(`${API_BASE}/api/todos`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders,
       body: JSON.stringify({ title: "" }), // Empty title should fail
     });
 
@@ -99,15 +113,15 @@ describe("Backend Integration Tests - /api/todos", () => {
     // First create a todo
     const createResponse = await fetch(`${API_BASE}/api/todos`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders,
       body: JSON.stringify({ title: "Todo to update", completed: false }),
     });
     const created = await createResponse.json();
 
-    // Update it
+    // Update it (using same auth token)
     const updateResponse = await fetch(`${API_BASE}/api/todos/${created.id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders,
       body: JSON.stringify({ completed: true }),
     });
     const updated = await updateResponse.json();
@@ -117,13 +131,16 @@ describe("Backend Integration Tests - /api/todos", () => {
     expect(updated.completed).toBe(true);
 
     // Cleanup
-    await fetch(`${API_BASE}/api/todos/${created.id}`, { method: "DELETE" });
+    await fetch(`${API_BASE}/api/todos/${created.id}`, {
+      method: "DELETE",
+      headers: authHeaders,
+    });
   });
 
   test("PATCH /api/todos/:id - returns 404 for non-existent todo", async () => {
     const response = await fetch(`${API_BASE}/api/todos/999999`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders,
       body: JSON.stringify({ completed: true }),
     });
 
@@ -136,14 +153,15 @@ describe("Backend Integration Tests - /api/todos", () => {
     // First create a todo
     const createResponse = await fetch(`${API_BASE}/api/todos`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders,
       body: JSON.stringify({ title: "Todo to delete", completed: false }),
     });
     const created = await createResponse.json();
 
-    // Delete it
+    // Delete it (using same auth token)
     const deleteResponse = await fetch(`${API_BASE}/api/todos/${created.id}`, {
       method: "DELETE",
+      headers: authHeaders,
     });
     const deleteData = await deleteResponse.json();
 
@@ -151,7 +169,9 @@ describe("Backend Integration Tests - /api/todos", () => {
     expect(deleteData.success).toBe(true);
 
     // Verify it's gone
-    const getResponse = await fetch(`${API_BASE}/api/todos`);
+    const getResponse = await fetch(`${API_BASE}/api/todos`, {
+      headers: authHeaders,
+    });
     const todos = await getResponse.json();
     const found = todos.find((t: any) => t.id === created.id);
     expect(found).toBeUndefined();
@@ -160,6 +180,7 @@ describe("Backend Integration Tests - /api/todos", () => {
   test("DELETE /api/todos/:id - returns 404 for non-existent todo", async () => {
     const response = await fetch(`${API_BASE}/api/todos/999999`, {
       method: "DELETE",
+      headers: authHeaders,
     });
 
     expect(response.status).toBe(404);
@@ -171,7 +192,7 @@ describe("Backend Integration Tests - /api/todos", () => {
     // 1. Create
     const createRes = await fetch(`${API_BASE}/api/todos`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders,
       body: JSON.stringify({ title: "E2E test todo", completed: false }),
     });
     const created = await createRes.json();
@@ -181,7 +202,7 @@ describe("Backend Integration Tests - /api/todos", () => {
     // 2. Update
     const updateRes = await fetch(`${API_BASE}/api/todos/${created.id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders,
       body: JSON.stringify({ completed: true }),
     });
     const updated = await updateRes.json();
@@ -189,7 +210,9 @@ describe("Backend Integration Tests - /api/todos", () => {
     expect(updated.completed).toBe(true);
 
     // 3. Verify it's in the list
-    const listRes = await fetch(`${API_BASE}/api/todos`);
+    const listRes = await fetch(`${API_BASE}/api/todos`, {
+      headers: authHeaders,
+    });
     const todos = await listRes.json();
     const found = todos.find((t: any) => t.id === created.id);
     expect(found).toBeDefined();
@@ -198,11 +221,14 @@ describe("Backend Integration Tests - /api/todos", () => {
     // 4. Delete
     const deleteRes = await fetch(`${API_BASE}/api/todos/${created.id}`, {
       method: "DELETE",
+      headers: authHeaders,
     });
     expect(deleteRes.status).toBe(200);
 
     // 5. Verify it's gone
-    const finalListRes = await fetch(`${API_BASE}/api/todos`);
+    const finalListRes = await fetch(`${API_BASE}/api/todos`, {
+      headers: authHeaders,
+    });
     const finalTodos = await finalListRes.json();
     const notFound = finalTodos.find((t: any) => t.id === created.id);
     expect(notFound).toBeUndefined();

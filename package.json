@@ -11,8 +11,12 @@
     "build:frontend": "cd frontend && bun run build",
     "db:migrate": "cd backend && bun run db:migrate",
     "migrate": "bun run db:migrate",
-    "test": "cd backend && bun test && cd ../frontend && bun test",
+    "test": "cd backend && bun test --verbose && cd ../frontend && bun test --verbose",
     "test:backend": "cd backend && bun test",
-    "test:frontend": "cd frontend && bun test"
+    "test:frontend": "cd frontend && bun test",
+    "typecheck": "cd frontend && bun run typecheck",
+    "lint": "cd frontend && bun run lint",
+    "lint:fix": "cd frontend && bun run lint:fix",
+    "check": "bun run typecheck && bun run lint && bun run test"
   }
 }
