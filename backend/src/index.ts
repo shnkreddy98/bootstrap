@@ -11,6 +11,7 @@ import {
   todoIdParamSchema,
   type Todo,
 } from './schemas'
+import { authenticateJWT } from './auth.js'
 
 /**
  * Main Application Server
@@ -28,13 +29,24 @@ const app = new Hono()
 // API Routes (Must come BEFORE static files)
 // ============================================
 
-app.use('/api/*', cors())
+app.use('/api/*', cors({
+  origin: (origin) => origin, // Allow any origin (adjust for production)
+  credentials: true, // Allow cookies to be sent/received
+}))
 
-// Get all todos
+// Health check (public, no auth required)
+app.get('/api/health', (c) => c.json({ status: 'ok' }))
+
+// JWT authentication for protected routes
+app.use('/api/todos/*', authenticateJWT)
+app.use('/api/todos', authenticateJWT)
+
+// Get all todos for the authenticated user
 app.get('/api/todos', async (c) => {
+  const user = c.get('user')
   const todos = await queryValidated(
-    'SELECT id, title, completed, created_at FROM todos ORDER BY created_at DESC',
-    [],
+    'SELECT id, user_id, title, completed, created_at FROM todos WHERE user_id = $1 ORDER BY created_at DESC',
+    [user.userId],
     todoSchema
   )
   return c.json(todos)
@@ -45,10 +57,11 @@ app.post(
   '/api/todos',
   zValidator('json', createTodoSchema),
   async (c) => {
+    const user = c.get('user')
     const data = c.req.valid('json')
     const todo = await queryOneValidated(
-      'INSERT INTO todos (title, completed) VALUES ($1, $2) RETURNING id, title, completed, created_at',
-      [data.title, data.completed], // Schema has default, no need for || false
+      'INSERT INTO todos (user_id, title, completed) VALUES ($1, $2, $3) RETURNING id, user_id, title, completed, created_at',
+      [user.userId, data.title, data.completed], // Schema has default, no need for || false
       todoSchema
     )
     return c.json(todo, 201)
@@ -60,13 +73,14 @@ app.patch(
   '/api/todos/:id',
   zValidator('json', updateTodoSchema),
   async (c) => {
+    const user = c.get('user')
     // Validate URL parameter (prevents NaN issues)
     const id = todoIdParamSchema.parse(c.req.param('id'))
     const { completed } = c.req.valid('json')
 
     const todo = await queryOneValidated(
-      'UPDATE todos SET completed = $1 WHERE id = $2 RETURNING id, title, completed, created_at',
-      [completed, id],
+      'UPDATE todos SET completed = $1 WHERE id = $2 AND user_id = $3 RETURNING id, user_id, title, completed, created_at',
+      [completed, id, user.userId],
       todoSchema
     )
 
@@ -80,12 +94,13 @@ app.patch(
 
 // Delete a todo
 app.delete('/api/todos/:id', async (c) => {
+  const user = c.get('user')
   // Validate URL parameter (prevents NaN issues)
   const id = todoIdParamSchema.parse(c.req.param('id'))
 
   const todo = await queryOneValidated(
-    'DELETE FROM todos WHERE id = $1 RETURNING id',
-    [id],
+    'DELETE FROM todos WHERE id = $1 AND user_id = $2 RETURNING id',
+    [id, user.userId],
     todoSchema.pick({ id: true }) // Only need to validate id field
   )
 
@@ -95,9 +110,6 @@ app.delete('/api/todos/:id', async (c) => {
 
   return c.json({ success: true })
 })
-
-// Health check
-app.get('/api/health', (c) => c.json({ status: 'ok' }))
 
 // ============================================
 // Static File Serving (After API routes)

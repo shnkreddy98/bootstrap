@@ -11,6 +11,8 @@ import { z } from 'zod'
 const connectionString = process.env.DATABASE_URL ||
   'postgresql://postgres:postgres@localhost:5432/myapp'
 
+console.log('Database connection string:', connectionString)
+
 export const pool = new Pool({
   connectionString,
 })

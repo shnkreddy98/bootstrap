@@ -21,6 +21,7 @@ import { z } from 'zod'
  */
 export const todoSchema = z.object({
   id: z.number().int().positive(),
+  user_id: z.string(),
   title: z.string().min(1).max(200),
   completed: z.boolean(),
   created_at: z.coerce.string(), // JSON-safe: database TIMESTAMP serialized to string

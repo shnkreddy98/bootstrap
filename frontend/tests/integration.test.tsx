@@ -157,20 +157,22 @@ describe("Frontend Integration Tests - API Integration", () => {
 /**
  * Component Integration Tests
  *
- * Uncomment these when you have @testing-library/react installed:
- * bun add -d @testing-library/react @testing-library/user-event happy-dom
- *
- * Then add to frontend/tests/setup.ts:
- * import { JSDOM } from 'happy-dom'
- * global.document = new JSDOM().window.document
+ * These tests render React components and test user interactions.
+ * They help catch bugs like missing imports (useState) and form submission issues.
  */
 
-/*
 describe("Frontend Integration Tests - Component Integration", () => {
+  beforeEach(() => {
+    // Reset mocks before each test
+    mock.restore();
+  });
+
   test("TodoItem component - renders todo and handles toggle", async () => {
     const user = userEvent.setup();
     const mockOnToggle = mock(() => {});
     const mockOnDelete = mock(() => {});
+
+    const { TodoItem } = await import("../src/components/TodoItem");
 
     render(
       <TodoItem
@@ -194,10 +196,12 @@ describe("Frontend Integration Tests - Component Integration", () => {
     const user = userEvent.setup();
     const mockOnSubmit = mock(() => {});
 
+    const { TodoForm } = await import("../src/components/TodoForm");
+
     render(<TodoForm onSubmit={mockOnSubmit} />);
 
     // Type into input
-    const input = screen.getByPlaceholderText(/add a new todo/i);
+    const input = screen.getByPlaceholderText(/what needs to be done/i);
     await user.type(input, "New integration test todo");
 
     // Submit form
@@ -207,7 +211,7 @@ describe("Frontend Integration Tests - Component Integration", () => {
     expect(mockOnSubmit).toHaveBeenCalledWith("New integration test todo");
   });
 
-  test("Full page integration - TodoList fetches and displays todos", async () => {
+  test("Full page integration - Home page fetches and displays todos", async () => {
     // Mock API
     const mockFetch = mock(() =>
       Promise.resolve({
@@ -226,7 +230,7 @@ describe("Frontend Integration Tests - Component Integration", () => {
       },
     });
 
-    const { default: Home } = await import("../src/pages/Home");
+    const { Home } = await import("../src/pages/Home");
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -241,7 +245,6 @@ describe("Frontend Integration Tests - Component Integration", () => {
     });
   });
 });
-*/
 
 /**
  * How to add more integration tests:
