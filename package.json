@@ -1,25 +1,27 @@
 {
-  "name": "backend",
+  "name": "bootstrap-app",
   "version": "1.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun run --watch src/index.ts",
-    "start": "bun run src/index.ts",
-    "db:migrate": "bun run src/migrations/migrate.ts",
-    "test": "bun test",
-    "typecheck": "tsc --noEmit",
-    "lint": "echo 'No linter configured for backend'"
-  },
-  "dependencies": {
-    "@hono/zod-validator": "^0.4.1",
-    "hono": "^4.7.9",
-    "jose": "^6.1.2",
-    "pg": "^8.13.1",
-    "zod": "^3.24.1"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "@types/pg": "^8.11.10",
-    "typescript": "^5.7.2"
+    "postinstall": "cd backend && bun install && cd ../frontend && bun install",
+    "start": "cd backend && bun run start",
+    "dev": "cd backend && bun run dev",
+    "dev:frontend": "cd frontend && bun run dev",
+    "build": "cd frontend && bun run build",
+    "build:frontend": "cd frontend && bun run build",
+    "db:migrate": "cd backend && bun run db:migrate",
+    "migrate": "bun run db:migrate",
+    "test": "cd backend && bun test --verbose && cd ../frontend && bun test --verbose",
+    "test:backend": "cd backend && bun test",
+    "test:frontend": "cd frontend && bun test",
+    "typecheck": "cd backend && bun run typecheck && cd ../frontend && bun run typecheck",
+    "typecheck:backend": "cd backend && bun run typecheck",
+    "typecheck:frontend": "cd frontend && bun run typecheck",
+    "lint": "cd backend && bun run lint && cd ../frontend && bun run lint",
+    "lint:backend": "cd backend && bun run lint",
+    "lint:frontend": "cd frontend && bun run lint",
+    "lint:fix": "cd frontend && bun run lint:fix",
+    "check": "bun run typecheck && bun run lint && bun run test"
   }
 }
