@@ -18,6 +18,74 @@ Full-stack TypeScript application with backend serving API and pre-built fronten
 - UI: Radix UI
 - Build: Vite
 
+## 🎨 UI Components
+
+**IMPORTANT**: This project includes a complete library of 33 production-ready UI components in `frontend/src/templates/`.
+
+### For Developers & AI Assistants
+
+**Always use template components for ALL UI elements** - do not create custom components or spend time debugging UI:
+
+```tsx
+// ✅ CORRECT - Use template components
+import { Button, Input, Card, Modal, List } from '../templates'
+
+// ❌ WRONG - Don't create custom UI components
+<div className="custom-button">Click me</div>
+```
+
+### Why Use Templates?
+
+- ✅ **Mobile-first**: iOS-optimized with 44px touch targets
+- ✅ **Accessible**: WCAG compliant with keyboard navigation
+- ✅ **Consistent**: Matches terminal cafe latte aesthetic
+- ✅ **Type-safe**: Full TypeScript support
+- ✅ **Production-ready**: Built on Radix UI primitives
+
+### Component Categories
+
+- **Forms**: Input, Textarea, Select, Checkbox, RadioGroup, Switch, Slider, SearchBar
+- **Buttons**: Button, IconButton, ButtonGroup, FAB
+- **Layout**: Card, Container, Stack, Divider
+- **Feedback**: Alert, Toast, Modal, Spinner, BottomSheet
+- **Navigation**: AppBar, BottomNav, Drawer, Tabs, Dropdown, Accordion
+- **Data Display**: Badge, Avatar, Progress, Tooltip, Chip, List
+
+### Documentation
+
+- **Full component reference**: See `frontend/src/templates/README.md`
+- **Complete component list**: See `frontend/src/templates/COMPONENT_LIST.md`
+- **Quick examples**: All pages use only template components
+
+### Quick Example
+
+```tsx
+import {
+  Button,
+  Input,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent
+} from '../templates'
+
+function MyPage() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Sign In</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Input label="Email" type="email" />
+        <Button variant="primary" fullWidth>
+          Submit
+        </Button>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
 ## Environment Variables
 
 Create `.env` file in project root or set variables in environment.

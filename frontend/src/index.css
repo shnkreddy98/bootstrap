@@ -16,6 +16,12 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: var(--text-base--line-height);
+
+  /* iOS Safe Area Support - Respect notch/Dynamic Island */
+  padding-top: var(--safe-area-inset-top);
+  padding-right: var(--safe-area-inset-right);
+  padding-bottom: var(--safe-area-inset-bottom);
+  padding-left: var(--safe-area-inset-left);
 }
 
 /* Links - Brand colored with subtle underline */
@@ -65,4 +71,100 @@ a:hover {
 
 *:hover {
   scrollbar-color: var(--color-border-0) transparent;
+}
+
+/* ============================================
+   MOBILE-FIRST TOUCH TARGETS
+   Ensures all interactive elements meet iOS 44x44px standard
+   ============================================ */
+
+button,
+a,
+[role="button"],
+[role="checkbox"],
+input[type="checkbox"],
+input[type="radio"] {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+
+/* Input fields need special handling to maintain visual appeal */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea {
+  min-height: var(--touch-target-min);
+}
+
+/* Ensure spacing between touch targets */
+button + button,
+a + a,
+button + a,
+a + button {
+  margin-left: 8px;
+}
+
+/* ============================================
+   FLUID TYPOGRAPHY UTILITIES
+   Smoothly scale text from mobile to desktop
+   ============================================ */
+
+.text-fluid-sm {
+  font-size: var(--text-fluid-sm);
+}
+
+.text-fluid-base {
+  font-size: var(--text-fluid-base);
+}
+
+.text-fluid-lg {
+  font-size: var(--text-fluid-lg);
+}
+
+.text-fluid-xl {
+  font-size: var(--text-fluid-xl);
+}
+
+.text-fluid-2xl {
+  font-size: var(--text-fluid-2xl);
+}
+
+/* ============================================
+   MOBILE OPTIMIZATIONS
+   ============================================ */
+
+/* Prevent text size adjustment on iOS */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Smooth scrolling for better mobile UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Remove tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Optimize font rendering for mobile */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Support for prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
