@@ -5,12 +5,11 @@
 # Dependencies
 node_modules/
 
-# Backend build (if any)
-backend/dist/
-backend/build/
+# Backend (not used in frontend-only mode)
+backend/
 
-# Frontend source maps (optional - can commit these too)
-# frontend/dist/**/*.map
+# Build output (frontend/dist is deployed)
+frontend/dist/**/*.map
 
 # OS
 .DS_Store
@@ -25,6 +24,3 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
-
-# IMPORTANT: frontend/dist/ is NOT ignored
-# It contains pre-built static files for instant deployment
