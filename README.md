@@ -2,6 +2,8 @@
 
 **Blazing-fast frontend development with mock data. No backend required!**
 
+> **🤖 For LLM Agents**: Read `AGENT_GUIDE.md` - it has everything you need.
+
 ## Stack
 
 - **Runtime**: Bun
@@ -189,8 +191,7 @@ When ready to connect to a real API:
 
 ## Documentation
 
-- **`IMPLEMENTATION_PROCESS.md`** - Complete implementation guide for LLMs and developers
-- **`FRONTEND_ONLY.md`** - Mock data system details
+- **`AGENT_GUIDE.md`** - Complete guide for LLM agents (the holy grail)
 - **`frontend/src/templates/README.md`** - Component documentation
 - **`frontend/src/templates/COMPONENT_LIST.md`** - All 33 components reference
 - **`frontend/src/templates/examples.tsx`** - Copy-paste code examples

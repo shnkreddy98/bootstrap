@@ -30,6 +30,96 @@ const mockConfig: Config = {
   version: '1.0.0',
 }
 
+// Mock Posts (for Feed)
+let mockPosts = [
+  {
+    id: 1,
+    userId: 1,
+    userName: 'Alice Johnson',
+    userAvatar: undefined,
+    content: 'Just launched my new project! Really excited to share it with everyone. Check it out!',
+    imageUrl: undefined,
+    likes: 24,
+    comments: 5,
+    createdAt: new Date('2024-01-15').toISOString(),
+  },
+  {
+    id: 2,
+    userId: 2,
+    userName: 'Bob Smith',
+    userAvatar: undefined,
+    content: 'Beautiful sunset today 🌅',
+    imageUrl: undefined,
+    likes: 42,
+    comments: 8,
+    createdAt: new Date('2024-01-14').toISOString(),
+  },
+  {
+    id: 3,
+    userId: 3,
+    userName: 'Carol White',
+    userAvatar: undefined,
+    content: 'Working on some exciting new features! Stay tuned for updates.',
+    imageUrl: undefined,
+    likes: 15,
+    comments: 3,
+    createdAt: new Date('2024-01-13').toISOString(),
+  },
+]
+
+let nextPostId = 4
+
+// Mock Products (for E-commerce)
+const mockProducts = [
+  { id: 1, name: 'Classic White T-Shirt', price: 29.99, category: 'clothing', imageUrl: undefined, stock: 50 },
+  { id: 2, name: 'Denim Jeans', price: 79.99, category: 'clothing', imageUrl: undefined, stock: 30 },
+  { id: 3, name: 'Leather Wallet', price: 49.99, category: 'accessories', imageUrl: undefined, stock: 20 },
+  { id: 4, name: 'Sunglasses', price: 149.99, category: 'accessories', imageUrl: undefined, stock: 15 },
+  { id: 5, name: 'Running Shoes', price: 119.99, category: 'shoes', imageUrl: undefined, stock: 25 },
+  { id: 6, name: 'Canvas Sneakers', price: 59.99, category: 'shoes', imageUrl: undefined, stock: 40 },
+  { id: 7, name: 'Leather Backpack', price: 89.99, category: 'bags', imageUrl: undefined, stock: 10 },
+  { id: 8, name: 'Tote Bag', price: 39.99, category: 'bags', imageUrl: undefined, stock: 0 },
+]
+
+// Mock Stats (for Dashboard)
+const mockStats = {
+  revenue: 125450,
+  revenueTrend: 12.5,
+  users: 1234,
+  usersTrend: 8.2,
+  orders: 456,
+  ordersTrend: 15.3,
+  activeSessions: 89,
+}
+
+// Mock Recent Activity (for Dashboard)
+const mockActivity = [
+  {
+    id: 1,
+    userName: 'John Doe',
+    userAvatar: undefined,
+    action: 'Completed a purchase',
+    type: 'purchase',
+    timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+  },
+  {
+    id: 2,
+    userName: 'Jane Smith',
+    userAvatar: undefined,
+    action: 'Signed up for an account',
+    type: 'signup',
+    timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+  },
+  {
+    id: 3,
+    userName: 'Mike Johnson',
+    userAvatar: undefined,
+    action: 'Updated profile information',
+    type: 'update',
+    timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+  },
+]
+
 /**
  * Simulate network delay for realistic UX testing
  */
@@ -87,6 +177,47 @@ export const mockApi = {
   async fetchConfig(): Promise<Config> {
     await delay(100)
     return { ...mockConfig }
+  },
+
+  // Posts (for Feed)
+  async fetchPosts(): Promise<typeof mockPosts> {
+    await delay(200)
+    return [...mockPosts]
+  },
+
+  async createPost(data: { content: string }): Promise<typeof mockPosts[0]> {
+    await delay(300)
+    const newPost = {
+      id: nextPostId++,
+      userId: mockUser.id,
+      userName: mockUser.name || 'User',
+      userAvatar: undefined,
+      content: data.content,
+      imageUrl: undefined,
+      likes: 0,
+      comments: 0,
+      createdAt: new Date().toISOString(),
+    }
+    mockPosts.unshift(newPost)
+    return newPost
+  },
+
+  // Products (for E-commerce)
+  async fetchProducts(): Promise<typeof mockProducts> {
+    await delay(200)
+    return [...mockProducts]
+  },
+
+  // Stats (for Dashboard)
+  async fetchStats(): Promise<typeof mockStats> {
+    await delay(200)
+    return { ...mockStats }
+  },
+
+  // Recent Activity (for Dashboard)
+  async fetchRecentActivity(): Promise<typeof mockActivity> {
+    await delay(150)
+    return [...mockActivity]
   },
 }
 

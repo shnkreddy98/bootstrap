@@ -135,3 +135,58 @@ export async function fetchConfig(): Promise<Config> {
   }
   return fetchAPI('/api/config', configSchema)
 }
+
+/**
+ * Fetch all posts (for Feed)
+ */
+export async function fetchPosts() {
+  if (USE_MOCK_DATA) {
+    return mockApi.fetchPosts()
+  }
+  // return fetchAPI('/api/posts', postsSchema)
+  throw new Error('Backend not implemented')
+}
+
+/**
+ * Create a new post
+ */
+export async function createPost(data: { content: string }) {
+  if (USE_MOCK_DATA) {
+    return mockApi.createPost(data)
+  }
+  // return fetchAPI('/api/posts', postSchema, { method: 'POST', body: JSON.stringify(data) })
+  throw new Error('Backend not implemented')
+}
+
+/**
+ * Fetch all products (for E-commerce)
+ */
+export async function fetchProducts() {
+  if (USE_MOCK_DATA) {
+    return mockApi.fetchProducts()
+  }
+  // return fetchAPI('/api/products', productsSchema)
+  throw new Error('Backend not implemented')
+}
+
+/**
+ * Fetch dashboard stats
+ */
+export async function fetchStats() {
+  if (USE_MOCK_DATA) {
+    return mockApi.fetchStats()
+  }
+  // return fetchAPI('/api/stats', statsSchema)
+  throw new Error('Backend not implemented')
+}
+
+/**
+ * Fetch recent activity
+ */
+export async function fetchRecentActivity() {
+  if (USE_MOCK_DATA) {
+    return mockApi.fetchRecentActivity()
+  }
+  // return fetchAPI('/api/activity', activitySchema)
+  throw new Error('Backend not implemented')
+}

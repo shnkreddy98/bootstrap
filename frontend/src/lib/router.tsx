@@ -6,6 +6,10 @@ import { Settings } from '../pages/Settings'
 import { Login } from '../pages/Login'
 import { Signup } from '../pages/Signup'
 import { NotFound } from '../pages/NotFound'
+import { FeedPage } from '../pages/Feed'
+import { ProductsPage } from '../pages/Products'
+import { DashboardPage } from '../pages/Dashboard'
+import { ContactPage } from '../pages/Contact'
 
 /**
  * Tanstack Router Setup
@@ -48,6 +52,30 @@ const settingsRoute = createRoute({
   component: Settings,
 })
 
+const feedRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: '/feed',
+  component: FeedPage,
+})
+
+const productsRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: '/products',
+  component: ProductsPage,
+})
+
+const dashboardRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: '/dashboard',
+  component: DashboardPage,
+})
+
+const contactRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: '/contact',
+  component: ContactPage,
+})
+
 // Auth routes (without AppLayout)
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -74,6 +102,10 @@ const routeTree = rootRoute.addChildren([
     indexRoute,
     profileRoute,
     settingsRoute,
+    feedRoute,
+    productsRoute,
+    dashboardRoute,
+    contactRoute,
   ]),
   loginRoute,
   signupRoute,

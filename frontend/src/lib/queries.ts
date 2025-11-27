@@ -1,5 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { fetchTodos, createTodo, toggleTodo, deleteTodo, fetchMe, fetchConfig } from './api'
+import {
+  fetchTodos,
+  createTodo,
+  toggleTodo,
+  deleteTodo,
+  fetchMe,
+  fetchConfig,
+  fetchPosts,
+  createPost,
+  fetchProducts,
+  fetchStats,
+  fetchRecentActivity,
+} from './api'
 
 /**
  * Tanstack Query Hooks
@@ -96,5 +108,58 @@ export function useMe() {
     queryKey: userKeys.me,
     queryFn: fetchMe,
     retry: false, // Don't retry on 401 errors
+  })
+}
+
+/**
+ * Fetch all posts (for Feed)
+ */
+export function usePosts() {
+  return useQuery({
+    queryKey: ['posts'],
+    queryFn: fetchPosts,
+  })
+}
+
+/**
+ * Create a new post
+ */
+export function useCreatePost() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: createPost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
+    },
+  })
+}
+
+/**
+ * Fetch all products (for E-commerce)
+ */
+export function useProducts() {
+  return useQuery({
+    queryKey: ['products'],
+    queryFn: fetchProducts,
+  })
+}
+
+/**
+ * Fetch dashboard stats
+ */
+export function useStats() {
+  return useQuery({
+    queryKey: ['stats'],
+    queryFn: fetchStats,
+  })
+}
+
+/**
+ * Fetch recent activity
+ */
+export function useRecentActivity() {
+  return useQuery({
+    queryKey: ['activity'],
+    queryFn: fetchRecentActivity,
   })
 }
