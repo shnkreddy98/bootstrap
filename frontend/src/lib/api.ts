@@ -10,16 +10,19 @@ import {
   type User,
   type Config,
 } from '../schemas'
+import { mockApi } from './mockData'
 
 /**
  * API Client
  *
- * Handles all communication with the backend API.
- * Automatically redirects to external auth on 401/403 errors.
- * Validates all API responses with Zod schemas for runtime type safety.
+ * Frontend-only mode: Uses mock data (no backend required)
+ * Backend mode: Uncomment the fetchAPI calls below
  *
- * Uses relative URLs - works in both dev (via Vite proxy) and production
+ * Toggle between modes by setting USE_MOCK_DATA
  */
+
+// Set to false when you have a real backend
+const USE_MOCK_DATA = true
 
 /**
  * Helper function for API calls with Zod validation
@@ -69,6 +72,9 @@ async function fetchAPI<T>(
  * Fetch all todos
  */
 export async function fetchTodos(): Promise<Todo[]> {
+  if (USE_MOCK_DATA) {
+    return mockApi.fetchTodos()
+  }
   return fetchAPI('/api/todos', todoListSchema)
 }
 
@@ -76,6 +82,9 @@ export async function fetchTodos(): Promise<Todo[]> {
  * Create a new todo
  */
 export async function createTodo(data: CreateTodoInput): Promise<Todo> {
+  if (USE_MOCK_DATA) {
+    return mockApi.createTodo(data)
+  }
   return fetchAPI('/api/todos', todoSchema, {
     method: 'POST',
     body: JSON.stringify(data),
@@ -86,6 +95,9 @@ export async function createTodo(data: CreateTodoInput): Promise<Todo> {
  * Toggle todo completion status
  */
 export async function toggleTodo(id: number, completed: boolean): Promise<Todo> {
+  if (USE_MOCK_DATA) {
+    return mockApi.toggleTodo(id, completed)
+  }
   return fetchAPI(`/api/todos/${id}`, todoSchema, {
     method: 'PATCH',
     body: JSON.stringify({ completed }),
@@ -96,6 +108,9 @@ export async function toggleTodo(id: number, completed: boolean): Promise<Todo> 
  * Delete a todo
  */
 export async function deleteTodo(id: number): Promise<{ success: boolean }> {
+  if (USE_MOCK_DATA) {
+    return mockApi.deleteTodo(id)
+  }
   return fetchAPI(`/api/todos/${id}`, deleteResponseSchema, {
     method: 'DELETE',
   })
@@ -105,6 +120,9 @@ export async function deleteTodo(id: number): Promise<{ success: boolean }> {
  * Fetch current user info
  */
 export async function fetchMe(): Promise<User> {
+  if (USE_MOCK_DATA) {
+    return mockApi.fetchMe()
+  }
   return fetchAPI('/api/me', userSchema)
 }
 
@@ -112,5 +130,8 @@ export async function fetchMe(): Promise<User> {
  * Fetch runtime configuration
  */
 export async function fetchConfig(): Promise<Config> {
+  if (USE_MOCK_DATA) {
+    return mockApi.fetchConfig()
+  }
   return fetchAPI('/api/config', configSchema)
 }
