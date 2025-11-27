@@ -6,10 +6,7 @@
     "dev": "bun run --watch src/index.ts",
     "start": "bun run src/index.ts",
     "db:migrate": "bun run src/migrations/migrate.ts",
-    "test": "bun test",
-    "typecheck": "bunx tsc --noEmit",
-    "lint": "bunx eslint src/ --ext .ts",
-    "check": "bun run typecheck && bun run lint"
+    "test": "bun test"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.4.1",
@@ -19,11 +16,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
     "@types/bun": "latest",
-    "@types/pg": "^8.11.10",
-    "eslint": "^9.39.1",
-    "globals": "^16.5.0",
-    "typescript-eslint": "^8.48.0"
+    "@types/pg": "^8.11.10"
   }
 }

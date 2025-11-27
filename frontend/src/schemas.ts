@@ -40,6 +40,24 @@ export const deleteResponseSchema = z.object({
   success: z.boolean(),
 })
 
+/**
+ * User Schema - Current user info
+ */
+export const userSchema = z.object({
+  userId: z.string(),
+  email: z.string().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  isAnonymous: z.boolean(),
+})
+
+/**
+ * Config Schema - Runtime configuration from backend
+ */
+export const configSchema = z.object({
+  externalAuthUrl: z.string(),
+})
+
 // ============================================
 // Request Schemas (what we send to API)
 // ============================================
@@ -66,3 +84,5 @@ export const updateTodoInputSchema = z.object({
 export type Todo = z.infer<typeof todoSchema>
 export type CreateTodoInput = z.infer<typeof createTodoInputSchema>
 export type UpdateTodoInput = z.infer<typeof updateTodoInputSchema>
+export type User = z.infer<typeof userSchema>
+export type Config = z.infer<typeof configSchema>

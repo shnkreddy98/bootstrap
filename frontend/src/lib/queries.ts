@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { fetchTodos, createTodo, toggleTodo, deleteTodo } from './api'
+import { fetchTodos, createTodo, toggleTodo, deleteTodo, fetchMe, fetchConfig } from './api'
 
 /**
  * Tanstack Query Hooks
@@ -10,6 +10,26 @@ import { fetchTodos, createTodo, toggleTodo, deleteTodo } from './api'
 // Query keys
 export const todoKeys = {
   all: ['todos'] as const,
+}
+
+export const userKeys = {
+  me: ['user', 'me'] as const,
+}
+
+export const configKeys = {
+  config: ['config'] as const,
+}
+
+/**
+ * Fetch runtime configuration
+ */
+export function useConfig() {
+  return useQuery({
+    queryKey: configKeys.config,
+    queryFn: fetchConfig,
+    staleTime: Infinity, // Config doesn't change during session
+    retry: false,
+  })
 }
 
 /**
@@ -65,5 +85,16 @@ export function useDeleteTodo() {
       // Invalidate and refetch todos after deleting
       queryClient.invalidateQueries({ queryKey: todoKeys.all })
     },
+  })
+}
+
+/**
+ * Fetch current user info
+ */
+export function useMe() {
+  return useQuery({
+    queryKey: userKeys.me,
+    queryFn: fetchMe,
+    retry: false, // Don't retry on 401 errors
   })
 }

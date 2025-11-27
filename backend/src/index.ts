@@ -37,9 +37,29 @@ app.use('/api/*', cors({
 // Health check (public, no auth required)
 app.get('/api/health', (c) => c.json({ status: 'ok' }))
 
+// Config endpoint (public) - provides runtime configuration to frontend
+app.get('/api/config', (c) => {
+  return c.json({
+    externalAuthUrl: process.env.EXTERNAL_AUTH_URL || '',
+  })
+})
+
 // JWT authentication for protected routes
+app.use('/api/me', authenticateJWT)
 app.use('/api/todos/*', authenticateJWT)
 app.use('/api/todos', authenticateJWT)
+
+// Get current user info
+app.get('/api/me', (c) => {
+  const user = c.get('user')
+  return c.json({
+    userId: user.userId,
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    isAnonymous: user.isAnonymous,
+  })
+})
 
 // Get all todos for the authenticated user
 app.get('/api/todos', async (c) => {

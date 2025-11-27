@@ -5,6 +5,17 @@ import compression from 'vite-plugin-compression'
 import path from 'path'
 
 export default defineConfig({
+  // Proxy API requests to backend in development
+  // Make sure this matches the backend PORT (default: 3000)
+  server: {
+    proxy: {
+      '/api': {
+        target: process.env.VITE_BACKEND_URL || 'http://localhost:3000',
+        changeOrigin: true,
+      },
+    },
+  },
+
   plugins: [
     react(),
     tailwindcss(),

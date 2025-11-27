@@ -3,8 +3,12 @@ import {
   todoSchema,
   todoListSchema,
   deleteResponseSchema,
+  userSchema,
+  configSchema,
   type Todo,
   type CreateTodoInput,
+  type User,
+  type Config,
 } from '../schemas'
 
 /**
@@ -13,17 +17,9 @@ import {
  * Handles all communication with the backend API.
  * Automatically redirects to external auth on 401/403 errors.
  * Validates all API responses with Zod schemas for runtime type safety.
+ *
+ * Uses relative URLs - works in both dev (via Vite proxy) and production
  */
-
-// API base URL
-// In production (single process), API is on same host
-// In dev, backend is on :3000, frontend on :5173
-const API_BASE = import.meta.env.VITE_API_URL ||
-  (import.meta.env.DEV ? 'http://localhost:3000' : '')
-
-// Auth redirect URL for 401/403 errors
-const AUTH_URL = import.meta.env.EXTERNAL_AUTH_URL ||
-  'https://auth.example.com/login'
 
 /**
  * Helper function for API calls with Zod validation
@@ -36,7 +32,7 @@ async function fetchAPI<T>(
   schema: z.ZodSchema<T>,
   options?: RequestInit
 ): Promise<T> {
-  const response = await fetch(`${API_BASE}${endpoint}`, {
+  const response = await fetch(endpoint, {
     ...options,
     credentials: 'include', // Send cookies with requests
     headers: {
@@ -45,10 +41,8 @@ async function fetchAPI<T>(
     },
   })
 
-  // Redirect on auth errors
+  // Just throw error on auth failures - UI components will handle displaying login
   if (response.status === 401 || response.status === 403) {
-    console.warn('Unauthorized, redirecting to auth...')
-    window.location.href = AUTH_URL
     throw new Error('Unauthorized')
   }
 
@@ -105,4 +99,18 @@ export async function deleteTodo(id: number): Promise<{ success: boolean }> {
   return fetchAPI(`/api/todos/${id}`, deleteResponseSchema, {
     method: 'DELETE',
   })
+}
+
+/**
+ * Fetch current user info
+ */
+export async function fetchMe(): Promise<User> {
+  return fetchAPI('/api/me', userSchema)
+}
+
+/**
+ * Fetch runtime configuration
+ */
+export async function fetchConfig(): Promise<Config> {
+  return fetchAPI('/api/config', configSchema)
 }

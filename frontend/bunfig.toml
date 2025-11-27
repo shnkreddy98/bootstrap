@@ -1,6 +1,7 @@
 [test]
 # Run tests from the tests directory
 preload = ["./tests/setup.ts"]
+environment = "happy-dom"
 
 # Test discovery pattern
 testGlob = ["tests/**/*.test.ts", "tests/**/*.test.tsx"]
