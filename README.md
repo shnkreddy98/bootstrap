@@ -20,7 +20,7 @@
 bun install
 
 # Start dev server (instant startup!)
-bun run dev
+bun start
 
 # Open browser
 http://localhost:5173
@@ -77,6 +77,8 @@ All mobile-first with 44px touch targets and iOS optimization.
 
 ### Start Dev Server
 ```bash
+bun start
+# or
 bun run dev
 ```
 Opens at http://localhost:5173

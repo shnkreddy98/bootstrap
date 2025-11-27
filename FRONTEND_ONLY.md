@@ -9,7 +9,7 @@ This project is configured for **frontend-only development** with mock data. No 
 bun install
 
 # Start dev server (instant startup!)
-bun run dev
+bun start
 
 # Build for production
 bun run build
@@ -132,7 +132,7 @@ export async function fetchPosts(): Promise<Post[]> {
 
 ### For Pure UI Work
 ```bash
-bun run dev
+bun start
 # Edit components, see changes instantly
 # No backend complexity, just UI
 ```

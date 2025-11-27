@@ -289,7 +289,7 @@ const [formData, setFormData] = useState({})
 
 This project uses **mock data** for instant development. No backend required!
 
-- Start: `bun run dev` (instant startup)
+- Start: `bun start` (instant startup)
 - Mock data: `frontend/src/lib/mockData.ts`
 - Toggle: Set `USE_MOCK_DATA = false` in `frontend/src/lib/api.ts` to use real backend
 - Details: See `FRONTEND_ONLY.md` for complete guide
