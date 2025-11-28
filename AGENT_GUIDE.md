@@ -36,6 +36,20 @@ http://localhost:5173/contact    # Contact
 
 ## System Overview
 
+### ⚠️ Backend Implementation Note
+
+**IMPORTANT**: This repository contains a `backend/` directory with a full backend implementation. **DO NOT USE IT.**
+
+- The backend exists for reference purposes only
+- All features should be built using the mock data system
+- Never connect the frontend to the backend
+- Never reference backend code in frontend implementations
+- When `bun start` runs, both backend and frontend start, but they are not connected
+
+**Always use the mock data system** (`frontend/src/lib/mockData.ts`) for all data needs.
+
+---
+
 ### What You Have
 
 - ✅ **33 UI Components** - All mobile-optimized, production-ready

@@ -2,6 +2,7 @@ import { describe, it, expect } from 'bun:test'
 import { render, screen } from '@testing-library/react'
 import { Container } from '../../src/templates'
 
+
 describe('Container', () => {
   it('renders children', () => {
     render(<Container>Container content</Container>)

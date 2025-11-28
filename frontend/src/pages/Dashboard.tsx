@@ -78,7 +78,7 @@ export function DashboardPage() {
                 <DollarSign size={20} className="text-success" />
               </div>
               <div className="flex items-center gap-2 mt-3">
-                {stats?.revenueTrend > 0 ? (
+                {stats?.revenueTrend && stats.revenueTrend > 0 ? (
                   <>
                     <TrendingUp size={14} className="text-success" />
                     <Badge variant="success" size="sm">

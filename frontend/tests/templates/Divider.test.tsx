@@ -2,6 +2,7 @@ import { describe, it, expect } from 'bun:test'
 import { render, screen } from '@testing-library/react'
 import { Divider } from '../../src/templates'
 
+
 describe('Divider', () => {
   it('renders horizontal divider', () => {
     const { container } = render(<Divider />)

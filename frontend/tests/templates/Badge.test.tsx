@@ -2,6 +2,7 @@ import { describe, it, expect } from 'bun:test'
 import { render, screen } from '@testing-library/react'
 import { Badge } from '../../src/templates'
 
+
 describe('Badge', () => {
   it('renders with text', () => {
     render(<Badge>New</Badge>)

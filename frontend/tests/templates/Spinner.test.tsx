@@ -2,6 +2,7 @@ import { describe, it, expect } from 'bun:test'
 import { render, screen } from '@testing-library/react'
 import { Spinner } from '../../src/templates'
 
+
 describe('Spinner', () => {
   it('renders spinner', () => {
     const { container } = render(<Spinner />)

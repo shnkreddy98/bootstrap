@@ -2,6 +2,7 @@ import { describe, it, expect } from 'bun:test'
 import { render, screen } from '@testing-library/react'
 import { Stack } from '../../src/templates'
 
+
 describe('Stack', () => {
   it('renders children', () => {
     render(

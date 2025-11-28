@@ -4,6 +4,26 @@
  * Configure testing environment for mobile UI components
  */
 
+// Explicitly setup happy-dom if not already available
+if (typeof window === 'undefined') {
+  const { Window } = require('happy-dom');
+  const window = new Window();
+  const document = window.document;
+
+  // @ts-ignore
+  global.window = window;
+  // @ts-ignore
+  global.document = document;
+  // @ts-ignore
+  global.navigator = window.navigator;
+  // @ts-ignore
+  global.HTMLElement = window.HTMLElement;
+  // @ts-ignore
+  global.Element = window.Element;
+  // @ts-ignore
+  global.ResizeObserver = window.ResizeObserver;
+}
+
 // Set test environment
 process.env.NODE_ENV = "test";
 process.env.VITE_API_URL = process.env.VITE_API_URL || "http://localhost:3000";

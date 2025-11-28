@@ -9,29 +9,30 @@ import type { Todo, User, Config } from '../schemas'
 
 // Mock Todos
 let mockTodos: Todo[] = [
-  { id: 1, title: 'Build awesome UI components', completed: true },
-  { id: 2, title: 'Test mobile responsiveness', completed: false },
-  { id: 3, title: 'Add dark mode support', completed: false },
-  { id: 4, title: 'Deploy to production', completed: false },
+  { id: 1, title: 'Build awesome UI components', completed: true, created_at: new Date('2024-01-01').toISOString() },
+  { id: 2, title: 'Test mobile responsiveness', completed: false, created_at: new Date('2024-01-02').toISOString() },
+  { id: 3, title: 'Add dark mode support', completed: false, created_at: new Date('2024-01-03').toISOString() },
+  { id: 4, title: 'Deploy to production', completed: false, created_at: new Date('2024-01-04').toISOString() },
 ]
 
 let nextTodoId = 5
 
 // Mock User
 const mockUser: User = {
-  id: 1,
+  userId: '1',
   email: 'demo@example.com',
-  name: 'Demo User',
+  firstName: 'Demo',
+  lastName: 'User',
+  isAnonymous: false,
 }
 
 // Mock Config
 const mockConfig: Config = {
-  appName: 'Bootstrap App',
-  version: '1.0.0',
+  externalAuthUrl: 'https://auth.example.com',
 }
 
 // Mock Posts (for Feed)
-let mockPosts = [
+const mockPosts = [
   {
     id: 1,
     userId: 1,
@@ -136,12 +137,13 @@ export const mockApi = {
     return [...mockTodos]
   },
 
-  async createTodo(data: { title: string; completed: boolean }): Promise<Todo> {
+  async createTodo(data: { title: string; completed?: boolean }): Promise<Todo> {
     await delay(300)
     const newTodo: Todo = {
       id: nextTodoId++,
       title: data.title,
-      completed: data.completed,
+      completed: data.completed ?? false,
+      created_at: new Date().toISOString(),
     }
     mockTodos.push(newTodo)
     return newTodo
@@ -189,8 +191,8 @@ export const mockApi = {
     await delay(300)
     const newPost = {
       id: nextPostId++,
-      userId: mockUser.id,
-      userName: mockUser.name || 'User',
+      userId: parseInt(mockUser.userId),
+      userName: `${mockUser.firstName || ''} ${mockUser.lastName || ''}`.trim() || 'User',
       userAvatar: undefined,
       content: data.content,
       imageUrl: undefined,
@@ -226,10 +228,10 @@ export const mockApi = {
  */
 export function resetMockData() {
   mockTodos = [
-    { id: 1, title: 'Build awesome UI components', completed: true },
-    { id: 2, title: 'Test mobile responsiveness', completed: false },
-    { id: 3, title: 'Add dark mode support', completed: false },
-    { id: 4, title: 'Deploy to production', completed: false },
+    { id: 1, title: 'Build awesome UI components', completed: true, created_at: new Date('2024-01-01').toISOString() },
+    { id: 2, title: 'Test mobile responsiveness', completed: false, created_at: new Date('2024-01-02').toISOString() },
+    { id: 3, title: 'Add dark mode support', completed: false, created_at: new Date('2024-01-03').toISOString() },
+    { id: 4, title: 'Deploy to production', completed: false, created_at: new Date('2024-01-04').toISOString() },
   ]
   nextTodoId = 5
 }

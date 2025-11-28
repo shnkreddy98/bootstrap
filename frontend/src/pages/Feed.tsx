@@ -4,14 +4,10 @@ import {
   Container,
   Stack,
   Card,
-  CardContent,
   Button,
   Avatar,
-  Badge,
   Spinner,
   Alert,
-  List,
-  ListItem,
   ListEmptyState,
   BottomSheet,
   BottomSheetContent,
@@ -98,60 +94,57 @@ export function FeedPage() {
                 }
               />
             ) : (
-              <List divided>
+              <div className="space-y-4">
                 {posts.map((post) => (
-                  <ListItem
-                    key={post.id}
-                    interactive
-                    leftContent={
+                  <Card key={post.id}>
+                    <div className="flex gap-3 p-4">
                       <Avatar
                         src={post.userAvatar}
                         fallback={post.userName[0]}
                         size="lg"
                       />
-                    }
-                  >
-                    <div className="flex-1">
-                      {/* User Info */}
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="font-medium text-fg-0">
-                          {post.userName}
-                        </span>
-                        <span className="text-xs text-fg-2">
-                          {new Date(post.createdAt).toLocaleDateString()}
-                        </span>
-                      </div>
+                      <div className="flex-1">
+                        {/* User Info */}
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="font-medium text-fg-0">
+                            {post.userName}
+                          </span>
+                          <span className="text-xs text-fg-2">
+                            {new Date(post.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
 
-                      {/* Post Content */}
-                      <p className="text-sm text-fg-1 mb-3">{post.content}</p>
+                        {/* Post Content */}
+                        <p className="text-sm text-fg-1 mb-3">{post.content}</p>
 
-                      {/* Post Image (if exists) */}
-                      {post.imageUrl && (
-                        <img
-                          src={post.imageUrl}
-                          alt="Post"
-                          className="w-full rounded border border-border-0 mb-3"
-                        />
-                      )}
+                        {/* Post Image (if exists) */}
+                        {post.imageUrl && (
+                          <img
+                            src={post.imageUrl}
+                            alt="Post"
+                            className="w-full rounded border border-border-0 mb-3"
+                          />
+                        )}
 
-                      {/* Engagement */}
-                      <div className="flex items-center gap-4">
-                        <button className="flex items-center gap-1.5 text-fg-2 hover:text-error transition-colors">
-                          <Heart size={18} />
-                          <span className="text-xs">{post.likes || 0}</span>
-                        </button>
-                        <button className="flex items-center gap-1.5 text-fg-2 hover:text-brand transition-colors">
-                          <MessageCircle size={18} />
-                          <span className="text-xs">{post.comments || 0}</span>
-                        </button>
-                        <button className="flex items-center gap-1.5 text-fg-2 hover:text-brand transition-colors">
-                          <Share2 size={18} />
-                        </button>
+                        {/* Engagement */}
+                        <div className="flex items-center gap-4">
+                          <button className="flex items-center gap-1.5 text-fg-2 hover:text-error transition-colors">
+                            <Heart size={18} />
+                            <span className="text-xs">{post.likes || 0}</span>
+                          </button>
+                          <button className="flex items-center gap-1.5 text-fg-2 hover:text-brand transition-colors">
+                            <MessageCircle size={18} />
+                            <span className="text-xs">{post.comments || 0}</span>
+                          </button>
+                          <button className="flex items-center gap-1.5 text-fg-2 hover:text-brand transition-colors">
+                            <Share2 size={18} />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </ListItem>
+                  </Card>
                 ))}
-              </List>
+              </div>
             )}
           </>
         )}
